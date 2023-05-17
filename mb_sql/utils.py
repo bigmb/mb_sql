@@ -5,7 +5,7 @@ import pandas as pd
 from .sql import trim_sql_query,read_sql,engine_execute
 import os
 
-__all__ = ['list_schemas']
+__all__ = ['list_schemas','rename_table','drop_table','drop_schema','create_schema','create_index','clone_db']
 
 def list_schemas(engine,logger=None) -> pd.DataFrame:
     """
@@ -19,6 +19,23 @@ def list_schemas(engine,logger=None) -> pd.DataFrame:
     """
     q1 ="SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('information_schema', 'mysql', 'performance_schema') ORDER BY schema_name;"
     return read_sql(q1,engine,logger=logger)
+
+def list_tables(engine,schema=None,logger=None) -> pd.DataFrame:
+    """
+    Returns list of tables in database.
+    
+    Args:
+        engine (sqlalchemy.engine.base.Engine): Engine object.
+        schema (str): Name of the schema. Default: None
+        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
+    Returns:
+        df (pandas.core.frame.DataFrame): DataFrame object.
+    
+    """
+    q1 = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;"
+    return read_sql(q1,engine,logger=logger)
+    
+    
 
 def rename_table(new_table_name,old_table_name,engine,schema_name=None,logger=None):
     """

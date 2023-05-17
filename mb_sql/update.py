@@ -2,6 +2,7 @@ import sqlalchemy as sa
 import pandas as pd
 import sqlalchemy.dialects.postgresql
 from .sql import read_sql
+from .utils import list_tables
 
 __all__ = ['get_last_updated_timestanp']
 
@@ -51,12 +52,15 @@ def get_new_updated_timestamps(mutable_name: str, mutable_table: dict, last_uts:
 
     t = mutable_table[mutable_name]
     remote_engine = t.get_src_engine()
-    frame_str = ss.frame_sql(t.table, schema=t.schema)
+    if t.scheme:
+        final_table = f"{t.scheme}.{t.table}"
+    else:
+        final_table = t.table
     
     query_str = "SELECT {updated_col}, COUNT(*) AS count FROM {} WHERE {updated_col} > '{}' GROUP BY {updated_col} ORDER BY {updated_col} LIMIT {};".format(
-        frame_str, str(last_uts), limit, updated_col=t.updated_col
+        final_table, str(last_uts), limit, updated_col=t.updated_col
     )
-    df = ss.read_sql(query_str, remote_engine)
+    df = read_sql(query_str, remote_engine)
 
     return df
 
@@ -72,19 +76,14 @@ def _to_sql(df, table_name, engine, dtype=None, from_mysql: bool = False, **kwar
     return df.to_sql(table_name, engine, dtype=dtype, **kwargs)
 
 
-def update(
-    df: pd.DataFrame, mutable_name: str, index_col: str, is_new_table: bool
-) -> int:
-    if mutable_name not in mutable_map:
+def update(df: pd.DataFrame, mutable_name: str, mutable_table: dict, index_col: str, is_new_table: bool) -> int:
+    if mutable_name not in mutable_table:
         raise ValueError("Unknown mutable with name '{}'.".format(mutable_name))
 
-    t = mutable_map[mutable_name]
+    t = mutable_table[mutable_name]
     engine = t.get_dst_engine()
-    if t.dst_engine == "ml":
-        df.columns = [x.lower() for x in df.columns]
 
-    with engine.begin() as conn:  # to make sure all our read/write ops are viewed as an atomic op
-        # remove old records that need updating
+    with engine.begin() as conn:  # 
         if not is_new_table:
             query_str = ",".join((str(x) for x in df[index_col].tolist()))
             query_str = "DELETE FROM {} WHERE {} IN ({});".format(
@@ -92,21 +91,19 @@ def update(
             )
             conn.execute(sa.text(query_str))
 
-        # append new records
         df = df.set_index(index_col, drop=True)
         _to_sql(
             df,
             mutable_name,
             conn,
             if_exists="append",
-            dtype=t.dtype,
-            from_mysql=t.schema == "winnow_db",
+            dtype=t.dtype
         )
 
         return len(df)
 
 
-def readsync_via_id(mutable_name: str, logger=None):
+def readsync_via_id(mutable_name: str, ,mutable_table: dict,logger=None):
     """Read-sync a muv1db table containing the 'updated' field.
 
     Parameters
@@ -118,10 +115,10 @@ def readsync_via_id(mutable_name: str, logger=None):
         logger for debugging purposes
     """
 
-    if mutable_name not in mutable_map:
+    if mutable_name not in mutable_table:
         raise ValueError("Unknown mutable with name '{}'.".format(mutable_name))
 
-    t = mutable_map[mutable_name]
+    t = mutable_table[mutable_name]
     engine = t.get_dst_engine()
     schema = t.schema
     table = t.table
@@ -129,14 +126,18 @@ def readsync_via_id(mutable_name: str, logger=None):
     chunk_size = t.chunk_size
 
     remote_engine = t.get_src_engine()
-    frame_str = ss.frame_sql(table, schema=schema)
-
-    if mutable_name in ss.list_tables(engine):
+    if schema:
+        final_table = f"{schema}.{table}"
+    else:
+        final_table = table
+    
+    
+    if mutable_name in list_tables(engine):
         is_new_table = False
         query_str = "SELECT MAX({index_col}) AS last_id FROM {mutable_name}".format(
             index_col=index_col, mutable_name=mutable_name
         )
-        last_id = ss.read_sql(query_str, engine)["last_id"][0]
+        last_id = read_sql(query_str, engine)["last_id"][0]
     else:
         is_new_table = True
         last_id = 0
@@ -144,17 +145,17 @@ def readsync_via_id(mutable_name: str, logger=None):
     msg = "Read-syncing mutable '{}' with last id {}".format(mutable_name, last_id)
     with logg.scoped_info(msg, logger=logger):
         first_id = last_id
-        query_str = "SELECT MAX({index_col}) AS last_id FROM {frame_str}".format(
-            index_col=index_col, frame_str=frame_str
+        query_str = "SELECT MAX({index_col}) AS last_id FROM {final_table}".format(
+            index_col=index_col, frame_str=final_table
         )
-        last_id = ss.read_sql(query_str, remote_engine)["last_id"][0]
+        last_id = read_sql(query_str, remote_engine)["last_id"][0]
         if logger:
             logger.debug("Remote has last id {}.".format(last_id))
 
         query_str = "SELECT COUNT(*) AS cnt FROM {frame_str} WHERE {index_col} > {first_id} AND {index_col} <= {last_id};".format(
-            index_col=index_col, frame_str=frame_str, first_id=first_id, last_id=last_id
+            index_col=index_col, frame_str=final_table, first_id=first_id, last_id=last_id
         )
-        count = ss.read_sql(query_str, remote_engine)["cnt"][0]
+        count = read_sql(query_str, remote_engine)["cnt"][0]
         if count == 0:
             return
 
