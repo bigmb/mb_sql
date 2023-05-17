@@ -2,7 +2,7 @@ import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker,declarative_base
 from mb_utils.src.logging import logger
 
-__all__ = ['get_engine', 'get_session','get_base','get_metadata','engine_execute']
+__all__ = ['get_engine', 'get_session','get_base','get_metadata']
 
 def get_engine(name:str , db: str, user: str , password: str , host: str , port=5432 , logger=logger, echo=False):
     """Get a SQLAlchemy engine object.
@@ -87,26 +87,3 @@ def get_metadata(base,conn, logger=logger):
         if logger: 
             logger.error(f'Error creating metadata for database.')
             
-
-def engine_execute(engine, query_str,logger=logger):
-    """
-    Execute a query on a SQLAlchemy engine object.
-    
-    Args:
-        engine (sqlalchemy.engine.base.Engine): Engine object.
-        query_str (str): Query string.
-        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
-    Returns:
-        result (sqlalchemy.engine.result.ResultProxy): Result object.
-    """
-    if isinstance(query_str, str):
-        query = sa.text(query_str)
-    else:
-        query = query_str
-    
-    if isinstance(engine, sa.engine.Engine):
-        with engine.begin() as conn:
-            return conn.execute(query)
-    elif isinstance(engine, sa.engine.Connection):
-        return engine.execute(query)
-    

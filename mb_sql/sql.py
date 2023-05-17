@@ -1,10 +1,17 @@
 import sqlalchemy as sa
-from mb_utils.src.logging import logger
 import pandas as pd
 
 __all__ = ['read_sql','engine_execute','to_sql']
 
-def read_sql(query,engine,index_col=None,chunk_size=10000,logger=logger):
+def trim_sql_query(sql_query: str) -> str:
+    """
+    Remove extra whitespace from a SQL query.
+    """
+    sql_query = " ".join(sql_query.splitlines())
+    sql_query = " ".join(sql_query.split())
+    return sql_query
+
+def read_sql(query,engine,index_col=None,chunk_size=10000,logger=None):
     """Read SQL query into a DataFrame.
     
     Args:
@@ -15,36 +22,54 @@ def read_sql(query,engine,index_col=None,chunk_size=10000,logger=logger):
         df (pandas.core.frame.DataFrame): DataFrame object.
     """
     try:
-        df = pd.read_sql(query,engine,index_col=index_col,chunksize=chunk_size)
+
+        if isinstance(query, str):
+            query = trim_sql_query(query)
+            query = sa.text(query)
+        elif isinstance(query, sa.sql.selectable.Select):
+            query = query
+        
+        if chunk_size==None or chunk_size==0:
+            with engine.begin() as conn:
+                df = pd.read_sql(query,conn,index_col=index_col)
+            return df
+            
+        with engine.begin() as conn:
+            df= pd.DataFrame()
+            for chunk in pd.read_sql(query,conn,index_col=index_col,chunksize=chunk_size):
+                df = pd.concat([df,chunk],ignore_index=True)
+            
         if logger:
             logger.info(f'SQL query executed successfully.')
         return df
-    except Exception as e:
+    except sa.exc.SQLAlchemyError as e:
         if logger:
             logger.error(f'Error executing SQL query.')
         raise e
     
-def engine_execute(engine,query_str,logger=logger):
+def engine_execute(engine, query_str):
     """
-    Execute a SQL query.
+    Execute a query on a SQLAlchemy engine object.
     
     Args:
         engine (sqlalchemy.engine.base.Engine): Engine object.
-        query_str (str): SQL query.
-        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
+        query_str (str): Query string.
     Returns:
-        None
+        result (sqlalchemy.engine.result.ResultProxy): Result object.
     """
-    try:
-        engine.execute(query_str)
-        if logger:
-            logger.info(f'SQL query executed successfully.')
-    except Exception as e:
-        if logger:
-            logger.error(f'Error executing SQL query.')
-        raise e
+    if isinstance(query_str, str):
+        query = sa.text(query_str)
+    else:
+        query = query_str
     
-def to_sql(df,engine,table_name,schema=None,if_exists='replace',index=False,index_label=None,chunksize=10000,logger=logger):
+    if isinstance(engine, sa.engine.Engine):
+        with engine.begin() as conn:
+            return conn.execute(query)
+    elif isinstance(engine, sa.engine.Connection):
+        return engine.execute(query)
+    
+    
+def to_sql(df,engine,table_name,schema=None,if_exists='replace',index=False,index_label=None,chunksize=10000,logger=None):
     """Write records stored in a DataFrame to a SQL database.
     
     Args:

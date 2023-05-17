@@ -1,14 +1,9 @@
 ## Tables to be updated every night by the cron job
 
 import sqlalchemy as sa
-import sqlalchemy.dialects.postgresql as pg
 import typing as tp
-from conn import get_engine
+from .conn import get_engine
 
-
-
-def get_public_engine(name,db,user,password,host,port=5432):
-    return get_engine('public')
 
 class TableConfig:
     """
@@ -21,7 +16,7 @@ class TableConfig:
         index_col: str,
         chunk_size: int,
         updated_col: str,
-        dst_engine: str = "ml",
+        dst_engine: str = "mb_public2",
         dtype: tp.Optional[dict] = None,
     ):
         self.schema = schema
@@ -33,6 +28,37 @@ class TableConfig:
         self.dtype = dtype
 
     def get_src_engine(self):
-        if self.schema == "public":
-            return get_engine('public')
+        if self.schema == "mb_public1":
+            self.src_engine = get_engine(name='postgresql' , db= 'postgres', user='postgres' , password= 'postgres', host= 'localhost', port= 5432, echo=False)
+            return self.src_engine
+        
+    def get_dst_engine(self):
+        if self.schema == "mb_public2":
+            self.dst_engine =get_engine(name='postgresql' , db= 'postgres_2', user='postgres' , password= 'postgres', host= 'localhost', port= 5432, echo=False)
+        return self.dst_engine
 
+
+
+mutable_tables = {
+    'table_to_update1': TableConfig('mb_public1',
+        "test2",
+        None,
+        10000,
+        None,
+        dtype={
+            'name': sa.Text,
+            'age' : sa.Integer
+            },
+    ),
+    
+    'table_to_update2': TableConfig('mb_public1',
+        "test3",
+        'id',
+        10000,
+        None,
+        dtype={
+            'id':sa.Integer,
+            'num': sa.Integer,
+            'data': sa.Text
+        },)   
+    }
