@@ -1,5 +1,5 @@
 from setuptools import setup,find_packages,find_namespace_packages
-from mb_sql.version import version
+from .mb_sql.version import version
 
 setup(
     name="mb_sql",
