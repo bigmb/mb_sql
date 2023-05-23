@@ -1,5 +1,4 @@
 sqlalchemy        
 numpy
 pandas
-mb_utils >= 1.0.0
-mb_pandas >= 1.0.0
+mb_pandas 

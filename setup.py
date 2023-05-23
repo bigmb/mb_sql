@@ -12,7 +12,6 @@ setup(
     install_requires=[
         "numpy",
         "mb_pandas",
-        "mb_utils",
         "sqlalchemy",
         "pandas"],
     python_requires='>=3.8',)
