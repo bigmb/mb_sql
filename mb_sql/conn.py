@@ -1,10 +1,9 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker,declarative_base
-from mb_utils.src.logging import logger
 
 __all__ = ['get_engine', 'get_session','get_base','get_metadata']
 
-def get_engine(name:str , db: str, user: str , password: str , host: str , port=5432 , logger=logger, echo=False):
+def get_engine(name:str , db: str, user: str , password: str , host: str , port=5432 , logger=None, echo=False):
     """Get a SQLAlchemy engine object.
 
     Args:
@@ -30,7 +29,7 @@ def get_engine(name:str , db: str, user: str , password: str , host: str , port=
             logger.error(f'Error creating engine for {name} database.')
         raise e    
 
-def get_session(engine, logger=logger):
+def get_session(engine, logger=None):
     """Get a SQLAlchemy session object.
 
     Args:
@@ -50,7 +49,7 @@ def get_session(engine, logger=logger):
             logger.error(f'Error creating session for {engine.url.database} database.')
         raise e
     
-def get_base(logger=logger):
+def get_base(logger=None):
     """Get a SQLAlchemy declarative base object.
     
     Args:
@@ -68,7 +67,7 @@ def get_base(logger=logger):
         if logger:
             logger.error(f'Error creating base for database.')
     
-def get_metadata(base,conn, logger=logger):
+def get_metadata(base,conn, logger=None):
     """Get a SQLAlchemy metadata object.
     
     Args:
