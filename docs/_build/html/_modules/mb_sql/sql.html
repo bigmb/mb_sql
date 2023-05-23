@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mb_sql.sql &mdash; mb_sql 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mb_sql
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">mb_sql</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mb_sql</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mb_sql.sql</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mb_sql.sql</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">sa</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;read_sql&#39;</span><span class="p">,</span><span class="s1">&#39;engine_execute&#39;</span><span class="p">,</span><span class="s1">&#39;to_sql&#39;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">trim_sql_query</span><span class="p">(</span><span class="n">sql_query</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove extra whitespace from a SQL query.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sql_query</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sql_query</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+    <span class="n">sql_query</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sql_query</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">sql_query</span>
+
+<div class="viewcode-block" id="read_sql"><a class="viewcode-back" href="../../mb_sql.html#mb_sql.sql.read_sql">[docs]</a><span class="k">def</span> <span class="nf">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span><span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read SQL query into a DataFrame.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        engine (sqlalchemy.engine.base.Engine): Engine object.</span>
+<span class="sd">        query (str): SQL query.</span>
+<span class="sd">        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        df (pandas.core.frame.DataFrame): DataFrame object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">trim_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">selectable</span><span class="o">.</span><span class="n">Select</span><span class="p">):</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
+        
+        <span class="k">if</span> <span class="n">chunk_size</span><span class="o">==</span><span class="kc">None</span> <span class="ow">or</span> <span class="n">chunk_size</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="n">conn</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="n">index_col</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">df</span>
+            
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span><span class="n">conn</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="n">index_col</span><span class="p">,</span><span class="n">chunksize</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">):</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span><span class="n">chunk</span><span class="p">],</span><span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;SQL query executed successfully.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span>
+    <span class="k">except</span> <span class="n">sa</span><span class="o">.</span><span class="n">exc</span><span class="o">.</span><span class="n">SQLAlchemyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error executing SQL query.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span></div>
+    
+<div class="viewcode-block" id="engine_execute"><a class="viewcode-back" href="../../mb_sql.html#mb_sql.sql.engine_execute">[docs]</a><span class="k">def</span> <span class="nf">engine_execute</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">query_str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Execute a query on a SQLAlchemy engine object.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        engine (sqlalchemy.engine.base.Engine): Engine object.</span>
+<span class="sd">        query_str (str): Query string.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        result (sqlalchemy.engine.result.ResultProxy): Result object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">query_str</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">query_str</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">Engine</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">begin</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">sa</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">Connection</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">engine</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="to_sql"><a class="viewcode-back" href="../../mb_sql.html#mb_sql.sql.to_sql">[docs]</a><span class="k">def</span> <span class="nf">to_sql</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">table_name</span><span class="p">,</span><span class="n">schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">if_exists</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">index_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">chunksize</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span><span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write records stored in a DataFrame to a SQL database.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        df (pandas.core.frame.DataFrame): DataFrame object.</span>
+<span class="sd">        engine (sqlalchemy.engine.base.Engine): Engine object.</span>
+<span class="sd">        table_name (str): Name of the table.</span>
+<span class="sd">        schema (str): Name of the schema. Default: None</span>
+<span class="sd">        if_exists (str): How to behave if the table already exists. Default: &#39;replace&#39;</span>
+<span class="sd">        index (bool): Write DataFrame index as a column. Default: False</span>
+<span class="sd">        index_label (str): Column label for index column(s). If None is given (default) and index is True, then the index names are used. A sequence should be given if the DataFrame uses MultiIndex. Default: None</span>
+<span class="sd">        chunksize (int): Number of rows to write at a time. Default: 10000</span>
+<span class="sd">        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">index</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">index_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">index_label</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span><span class="n">engine</span><span class="p">,</span><span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span><span class="n">if_exists</span><span class="o">=</span><span class="n">if_exists</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span><span class="n">index_label</span><span class="o">=</span><span class="n">index_label</span><span class="p">,</span><span class="n">chunksize</span><span class="o">=</span><span class="n">chunksize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;DataFrame written to </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s1"> table.&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error writing DataFrame to </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s1"> table.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span></div>
+    
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, malav bateriwala.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

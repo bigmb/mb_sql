@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mb_sql.conn &mdash; mb_sql 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            mb_sql
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">mb_sql</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mb_sql</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mb_sql.conn</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mb_sql.conn</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">sa</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span><span class="p">,</span><span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">mb_utils.src.logging</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;get_engine&#39;</span><span class="p">,</span> <span class="s1">&#39;get_session&#39;</span><span class="p">,</span><span class="s1">&#39;get_base&#39;</span><span class="p">,</span><span class="s1">&#39;get_metadata&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="get_engine"><a class="viewcode-back" href="../../mb_sql.html#mb_sql.conn.get_engine">[docs]</a><span class="k">def</span> <span class="nf">get_engine</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="nb">str</span> <span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span> <span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5432</span> <span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a SQLAlchemy engine object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name (str): Name of the database.</span>
+<span class="sd">        db (str): Database name.</span>
+<span class="sd">        user (str): Username for the database.</span>
+<span class="sd">        password (str): Password for the database.</span>
+<span class="sd">        host (str): Hostname for the database.</span>
+<span class="sd">        port (str): Port for the database. Default: 5432</span>
+<span class="sd">        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger</span>
+<span class="sd">        echo (bool): Echo SQL statements to stdout. Default: False</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        engine (sqlalchemy.engine.base.Engine): Engine object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">://</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">password</span><span class="si">}</span><span class="s1">@</span><span class="si">{</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">db</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Engine created for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> database.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">engine</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error creating engine for </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> database.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span>    </div>
+
+<div class="viewcode-block" id="get_session"><a class="viewcode-back" href="../../mb_sql.html#mb_sql.conn.get_session">[docs]</a><span class="k">def</span> <span class="nf">get_session</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a SQLAlchemy session object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        engine (sqlalchemy.engine.base.Engine): Engine object.</span>
+<span class="sd">        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        session (sqlalchemy.orm.session.Session): Session object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)()</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Session created for </span><span class="si">{</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">database</span><span class="si">}</span><span class="s1"> database.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">session</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error creating session for </span><span class="si">{</span><span class="n">engine</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">database</span><span class="si">}</span><span class="s1"> database.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span></div>
+    
+<div class="viewcode-block" id="get_base"><a class="viewcode-back" href="../../mb_sql.html#mb_sql.conn.get_base">[docs]</a><span class="k">def</span> <span class="nf">get_base</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a SQLAlchemy declarative base object.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        engine (sqlalchemy.engine.base.Engine): Engine object.</span>
+<span class="sd">        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        base (sqlalchemy.ext.declarative.api.DeclarativeMeta): Declarative base object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Base created for database.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Base</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error creating base for database.&#39;</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="get_metadata"><a class="viewcode-back" href="../../mb_sql.html#mb_sql.conn.get_metadata">[docs]</a><span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="n">base</span><span class="p">,</span><span class="n">conn</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get a SQLAlchemy metadata object.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        base (sqlalchemy.ext.declarative.api.DeclarativeMeta): Declarative base object.</span>
+<span class="sd">        conn (sqlalchemy.engine.base.Connection): Connection object.</span>
+<span class="sd">        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        metadata (sqlalchemy.sql.schema.MetaData): Metadata object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span> 
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Metadata created for database.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">metadata</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="p">:</span> 
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error creating metadata for database.&#39;</span><span class="p">)</span></div>
+            
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, malav bateriwala.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
