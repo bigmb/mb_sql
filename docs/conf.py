@@ -30,6 +30,8 @@ release = version
 
 import sphinx_rtd_theme
 
+needs_sphinx = '3.0'
+
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
@@ -38,6 +40,8 @@ extensions = [
     'autoapi.extension',
     'sphinx_rtd_theme',
 ]
+
+sys.path.insert(0, "/usr/bin/python3.8")
 
 # sphinx-autoapi
 autoapi_dirs = ["../mb_sql"]
