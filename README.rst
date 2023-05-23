@@ -1,4 +1,5 @@
-# mb_sql
-Package for replicating cloud DB to local server.
+mb_sql
 
-# updating all functions
+  Package for replicating cloud DB to local server.
+
+functions
