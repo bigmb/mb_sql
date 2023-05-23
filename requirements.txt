@@ -2,3 +2,4 @@ sqlalchemy
 numpy
 pandas
 mb_pandas 
+mb_utils
