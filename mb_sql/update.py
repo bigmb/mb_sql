@@ -103,7 +103,7 @@ def update(df: pd.DataFrame, mutable_name: str, mutable_table: dict, index_col: 
         return len(df)
 
 
-def readsync_via_id(mutable_name: str, ,mutable_table: dict,logger=None):
+def readsync_via_id(mutable_name: str,mutable_table: dict,logger=None):
     """Read-sync a muv1db table containing the 'updated' field.
 
     Parameters
