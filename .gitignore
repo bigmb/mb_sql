@@ -11,6 +11,7 @@ model.png
 model
 
 # Distribution / packaging
+docs_config/*
 .Python
 torch_compile_debug/
 data/
