@@ -3,34 +3,130 @@ import pandas as pd
 import sqlalchemy.dialects.postgresql
 from .sql import read_sql
 from .utils import list_tables
+import boto3
 
 __all__ = ['get_last_updated_timestanp']
 
 
-def get_last_updated_timestamp(mutable_name: str, mutable_table: dict ,updated_col: str = "updated") -> pd.Timestamp:
+def get_last_updated_timestamp(engine,table_name: str,schema : str,updated_col: str = "updated") -> pd.Timestamp:
     """
     Gets the last updated timestamp from all records of an sqlite table containing the 'updated' field.
 
     Args:
-        mutable_name (str): tables containing the 'updated' field. Must be a key of `mutable_map` module variable.
+        engine (sqlalchemy.engine.base.Engine): Engine object.
+        table_name (str): tables containing the 'updated' field. 
+        schema (str): Name of the schema. Default: None
         updated_col (str): name of the 'updated' field. Default: 'updated'
     Returns:
         ts (pandas.Timestamp): last updated timestamp
     """
 
-    if mutable_name not in mutable_table:
-        raise ValueError("Unknown mutable with name '{}'.".format(mutable_name))
-
-    t = mutable_table[mutable_name]
-    engine = t.get_dst_engine()
-
-    query_str = f"SELECT MAX({updated_col}) AS last_updated FROM {mutable_name};"
+    query_str = f"SELECT MAX({updated_col}) AS last_updated FROM {table_name};"
     df = read_sql(query_str, engine)
 
     ts = pd.Timestamp(df["last_updated"][0])
     if pd.isnull(ts):
         ts = pd.Timestamp("2014-01-01")
     return ts
+
+def get_last_updated_data_id(engine,table_name: str,schema : str,updated_col: str = "updated") -> pd.Timestamp:
+    """
+    Gets all the id , updated timestamp from all records of an sqlite table containing the 'updated' field.
+    
+    Args:
+        engine (sqlalchemy.engine.base.Engine): Engine object.
+        table_name (str): tables containing the 'updated' field.
+        schema (str): Name of the schema. Default: None
+        updated_col (str): name of the 'updated' field. Default: 'updated'
+    Returns:
+        ts (pandas.Timestamp): last updated timestamp
+    """
+    query_str = f"SELECT id, {updated_col} FROM {table_name};"
+    df = read_sql(query_str, engine)
+    
+    for row in df.iterrows():
+        if pd.isnull(row[updated_col]):
+            row[updated_col] = pd.Timestamp("2014-01-01")
+    return df
+
+
+def get_new_updated_timestamps_and_id_from_s3(bucket_name,table_name, key, last_updated,
+                access_key='your_access_key',
+                secret_key='your_secret_key',region_name='your_region_name'):
+    s3 = boto3.client('s3', aws_access_key_id=access_key,
+                      aws_secret_access_key=secret_key, region_name=region_name)
+    obj = s3.get_object(Bucket=bucket_name, Key=key)
+    data = pd.read_csv(obj['Body'])
+    new_data = data[data['last_updated'] > last_updated]
+    new_rows = []
+    for index, row in new_data.iterrows():
+        if row['id'] not in [r[0] for r in get_last_updated_data_id(table_name)]:
+            new_rows.append(row)
+    return new_rows, new_data.iloc[-1]['last_updated']
+
+# Get new updated timestamps from S3
+def get_new_updated_timestamps_from_s3(bucket_name, key, last_updated,
+                               access_key='your_access_key',
+                               secret_key='your_secret_key',region_name='your_region_name'):
+    """
+    Get new updated timestamps from S3 bucket
+    
+    Args:
+        bucket_name (str): name of the S3 bucket
+        key (str): name of the file in the S3 bucket
+        last_updated (pandas.Timestamp): last updated timestamp
+    Returns:
+        new_data (pandas.DataFrame): dataframe containing 'updated' column.
+    """
+    s3 = boto3.client('s3', aws_access_key_id=access_key,
+                      aws_secret_access_key=secret_key, region_name=region_name)
+    obj = s3.get_object(Bucket=bucket_name, Key=key)
+    data = pd.read_csv(obj['Body'])
+    new_data = data[data['last_updated'] > last_updated]
+    return new_data
+
+#####
+
+
+# Update local table
+def update(table_name, data):
+    for index, row in data.iterrows():
+        query = f"UPDATE {table_name} SET column1 = {row['column1']}, column2 = {row['column2']} WHERE id = {row['id']}"
+        cur.execute(query)
+
+# Read sync via id
+def readsync_via_id(table_name, id):
+    query = f"SELECT * from {table_name} WHERE id = {id}"
+    cur.execute(query)
+    rows = cur.fetchall()
+    return rows
+
+# Merge data
+def merge(table_name, data):
+    conn = create_conn()
+    cur = conn.cursor()
+    for index, row in data.iterrows():
+        query = f"INSERT INTO {table_name} (id, column1, column2) VALUES ({row['id']}, {row['column1']}, {row['column2']}) ON CONFLICT (id) DO UPDATE SET column1 = {row['column1']}, column2 = {row['column2']}"
+        cur.execute(query)
+    conn.commit()
+    conn.close()
+
+# Get duplicates
+def get_duplicates(table_name):
+    query = f"SELECT id, COUNT(*) FROM {table_name} GROUP BY id HAVING COUNT(*) > 1"
+    cur.execute(query)
+    rows = cur.fetchall()
+    return rows
+
+# Get updated fields
+def get_updated_fields(table_name, id):
+    query = f"SELECT column1, column2 from {table_name} WHERE id = {id}"
+    cur.execute(query)
+    rows = cur.fetchall()
+    return rows
+
+
+######
 
 
 def get_new_updated_timestamps(mutable_name: str, mutable_table: dict, last_uts: pd.Timestamp, limit: int = 10000) -> pd.Timestamp:

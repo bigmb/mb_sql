@@ -1,6 +1,5 @@
 ## file for extra sql functions
 
-import sqlalchemy as sa
 import pandas as pd
 from .sql import trim_sql_query,read_sql,engine_execute
 import os
@@ -35,7 +34,6 @@ def list_tables(engine,schema=None,logger=None) -> pd.DataFrame:
     q1 = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;"
     return read_sql(q1,engine,logger=logger)
     
-    
 
 def rename_table(new_table_name,old_table_name,engine,schema_name=None,logger=None):
     """
@@ -51,10 +49,10 @@ def rename_table(new_table_name,old_table_name,engine,schema_name=None,logger=No
         None
     """
     if schema_name:
-        q1 = f"ALTER TABLE {schema_name}.{old_table_name} RENAME TO {schema_name}.{new_table_name};"
+        q1 = f"ALTER TABLE {schema_name}.{old_table_name} RENAME TO {new_table_name};"
     else:
         q1 = f"ALTER TABLE {old_table_name} RENAME TO {new_table_name};"
-    engine_execute(q1,engine,logger=logger)
+    engine_execute(engine,q1)
     if logger:
         logger.info(f'Table {old_table_name} renamed to {new_table_name}.')
 
@@ -74,7 +72,7 @@ def drop_table(table_name,engine,schema_name=None,logger=None):
         q1 = f"DROP TABLE {schema_name}.{table_name};"
     else:
         q1 = f"DROP TABLE {table_name};"
-    engine_execute(q1,engine,logger=logger)
+    engine_execute(engine,q1)
     if logger:
         logger.info(f'Table {table_name} dropped.')
         
@@ -90,7 +88,7 @@ def drop_schema(schema_name,engine,logger=None):
         None
     """
     q1 = f"DROP SCHEMA {schema_name};"
-    engine_execute(q1,engine,logger=logger)
+    engine_execute(engine,q1)
     if logger:
         logger.info(f'Schema {schema_name} dropped.')
         
@@ -106,7 +104,7 @@ def create_schema(schema_name,engine,logger=None):
         None
     """
     q1 = f"CREATE SCHEMA {schema_name};"
-    engine_execute(q1,engine,logger=logger)
+    engine_execute(engine,q1)
     if logger:
         logger.info(f'Schema {schema_name} created.')
 
@@ -123,7 +121,7 @@ def create_index(table,index_col,engine,logger=None):
         None
     """
     q1 = f"CREATE INDEX {index_col} ON {table};"
-    engine_execute(q1,engine,logger=logger)
+    engine_execute(engine,q1)
     if logger:
         logger.info(f'Index {index_col} created for table {table}.')
         
