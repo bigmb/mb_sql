@@ -93,7 +93,7 @@ def update(table_name, data):
     for index, row in data.iterrows():
         query = f"UPDATE {table_name} SET column1 = {row['column1']}, column2 = {row['column2']} WHERE id = {row['id']}"
         cur.execute(query)
-
+    
 # Read sync via id
 def readsync_via_id(table_name, id):
     query = f"SELECT * from {table_name} WHERE id = {id}"
