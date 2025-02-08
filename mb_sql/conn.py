@@ -1,10 +1,11 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker,declarative_base
+from sqlalchemy import create_engine
 
-__all__ = ['get_engine', 'get_session','get_base','get_metadata','create_engine']
+__all__ = ['get_engine', 'get_session','get_base','get_metadata','create_engine_db']
 
 
-def create_engine(user, password, host, name, port=5432):
+def create_engine_db(user, password, host, name, port=5432):
     """
     Create a new SQLAlchemy engine object.
     """
