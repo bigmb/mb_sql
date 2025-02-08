@@ -1,7 +1,20 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker,declarative_base
 
-__all__ = ['get_engine', 'get_session','get_base','get_metadata']
+__all__ = ['get_engine', 'get_session','get_base','get_metadata','create_engine']
+
+
+def create_engine(user, password, host, name, port=5432):
+    """
+    Create a new SQLAlchemy engine object.
+    """
+    engine = create_engine(f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}')
+    with engine.connect() as connection:
+        result = connection.execute("SELECT datname FROM pg_database WHERE datistemplate = false;")
+        databases = result.fetchall()
+
+        for db in databases:
+            print(db[0])
 
 def get_engine(name:str , db: str, user: str , password: str , host: str , port=5432 , logger=None, echo=False):
     """Get a SQLAlchemy engine object.
@@ -61,11 +74,11 @@ def get_base(logger=None):
     try:
         Base = declarative_base()
         if logger:
-            logger.info(f'Base created for database.')
+            logger.info('Base created for database.')
         return Base
-    except Exception as e:
+    except Exception:
         if logger:
-            logger.error(f'Error creating base for database.')
+            logger.error('Error creating base for database.')
     
 def get_metadata(base,conn, logger=None):
     """Get a SQLAlchemy metadata object.
@@ -80,9 +93,9 @@ def get_metadata(base,conn, logger=None):
     try:
         metadata = base.metadata.create_all(conn)
         if logger: 
-            logger.info(f'Metadata created for database.')
+            logger.info('Metadata created for database.')
         return metadata
-    except Exception as e:
+    except Exception:
         if logger: 
-            logger.error(f'Error creating metadata for database.')
+            logger.error('Error creating metadata for database.')
             
