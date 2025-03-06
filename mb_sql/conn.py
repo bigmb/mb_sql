@@ -1,23 +1,13 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker,declarative_base
-from sqlalchemy import create_engine
 
-__all__ = ['get_engine', 'get_session','get_base','get_metadata','create_engine_db']
+__all__ = ['get_engine', 'get_session','get_base','get_metadata']
 
 
-def create_engine_db(user, password, host, name, port=5432):
-    """
-    Create a new SQLAlchemy engine object.
-    """
-    engine = create_engine(f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}')
-    with engine.connect() as connection:
-        result = connection.execute("SELECT datname FROM pg_database WHERE datistemplate = false;")
-        databases = result.fetchall()
-
-        for db in databases:
-            print(db[0])
-
-def get_engine(name:str , db: str, user: str , password: str , host: str , port=5432 , logger=None, echo=False):
+def get_engine(name:str ='postgresql+psycopg2' , db: str = 'postgres',
+                user: str = 'postgres', password: str  = 'postgres', 
+                host: str = 'localhost', port=5432 , 
+                logger=None, echo=False):
     """Get a SQLAlchemy engine object.
 
     Args:
