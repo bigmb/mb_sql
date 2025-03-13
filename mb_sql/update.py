@@ -5,7 +5,7 @@ from .sql import read_sql
 from .utils import list_tables
 import boto3
 
-__all__ = ['get_last_updated_timestanp']
+__all__ = ['get_last_updated_timestamp']
 
 
 def get_last_updated_timestamp(engine,table_name: str,schema : str,updated_col: str = "updated") -> pd.Timestamp:
@@ -86,7 +86,7 @@ def get_new_updated_timestamps_from_s3(bucket_name, key, last_updated,
     return new_data
 
 #####
-
+'''
 
 # Update local table
 def update(table_name, data):
@@ -705,3 +705,5 @@ def vacuum(level: str = "full", logger=None):
 
     if logger:
         logger.info("Done.")
+        
+'''

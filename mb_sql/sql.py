@@ -40,11 +40,11 @@ def read_sql(query,engine,index_col=None,chunk_size=10000,logger=None):
                 df = pd.concat([df,chunk],ignore_index=True)
             
         if logger:
-            logger.info(f'SQL query executed successfully.')
+            logger.info('SQL query executed successfully.')
         return df
     except sa.exc.SQLAlchemyError as e:
         if logger:
-            logger.error(f'Error executing SQL query.')
+            logger.error('Error executing SQL query.')
         raise e
     
 def engine_execute(engine, query_str):

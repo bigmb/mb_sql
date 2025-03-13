@@ -1,7 +1,7 @@
 ## file for extra sql functions
 
 import pandas as pd
-from .sql import trim_sql_query,read_sql,engine_execute
+from .sql import read_sql,engine_execute
 import os
 
 __all__ = ['list_schemas','rename_table','drop_table','drop_schema','create_schema','create_index','clone_db']
@@ -31,7 +31,7 @@ def list_tables(engine,schema=None,logger=None) -> pd.DataFrame:
         df (pandas.core.frame.DataFrame): DataFrame object.
     
     """
-    q1 = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;"
+    q1 = f"SELECT table_name FROM information_schema.tables WHERE table_schema = '{schema}' ORDER BY table_name;"
     return read_sql(q1,engine,logger=logger)
     
 
