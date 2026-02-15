@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 import pandas as pd
 import sqlalchemy.dialects.postgresql
-from .sql import read_sql
+from .basic import read_sql
 from .utils import list_tables
 import boto3
 

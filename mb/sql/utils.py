@@ -1,7 +1,7 @@
 ## file for extra sql functions
 
 import pandas as pd
-from .sql import read_sql,engine_execute
+from .basic import read_sql,engine_execute
 import os
 from mb.utils.logging import logg
 
@@ -36,7 +36,7 @@ def list_tables(engine,schema=None,logger=None) -> pd.DataFrame:
     return read_sql(q1,engine,logger=logger)
     
 
-def rename_table(new_table_name,old_table_name,engine,schema_name=None,logger=None):
+def rename_table(new_table_name,old_table_name,engine,schema=None,logger=None):
     """
     Rename table in database.
     
@@ -49,61 +49,61 @@ def rename_table(new_table_name,old_table_name,engine,schema_name=None,logger=No
     Returns:
         None
     """
-    if schema_name:
-        q1 = f"ALTER TABLE {schema_name}.{old_table_name} RENAME TO {new_table_name};"
+    if schema:
+        q1 = f"ALTER TABLE {schema}.{old_table_name} RENAME TO {new_table_name};"
     else:
         q1 = f"ALTER TABLE {old_table_name} RENAME TO {new_table_name};"
     engine_execute(engine,q1)
     logg.info(f'Table {old_table_name} renamed to {new_table_name}.',logger=logger)
 
-def drop_table(table_name,engine,schema_name=None,logger=None):
+def drop_table(table_name,engine,schema=None,logger=None):
     """
     Drop table in database.
     
     Args:
         table_name (str): Name of the table.
         engine (sqlalchemy.engine.base.Engine): Engine object.
-        schema_name (str): Name of the schema. Default: None
+        schema (str): Name of the schema. Default: None
         logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
     Returns:
         None
     """
-    if schema_name:
-        q1 = f"DROP TABLE {schema_name}.{table_name};"
+    if schema:
+        q1 = f"DROP TABLE {schema}.{table_name};"
     else:
         q1 = f"DROP TABLE {table_name};"
     engine_execute(engine,q1)
     logg.info(f'Table {table_name} dropped.',logger=logger)
         
-def drop_schema(schema_name,engine,logger=None):
+def drop_schema(schema,engine,logger=None):
     """
     Drop schema in database.
     
     Args:
-        schema_name (str): Name of the schema.
+        schema (str): Name of the schema.
         engine (sqlalchemy.engine.base.Engine): Engine object.
         logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
     Returns:
         None
     """
-    q1 = f"DROP SCHEMA {schema_name};"
+    q1 = f"DROP SCHEMA {schema};"
     engine_execute(engine,q1)
-    logg.info(f'Schema {schema_name} dropped.',logger=logger)
+    logg.info(f'Schema {schema} dropped.',logger=logger)
         
-def create_schema(schema_name,engine,logger=None):
+def create_schema(schema,engine,logger=None):
     """
     Create schema in database.
     
     Args:
-        schema_name (str): Name of the schema.
+        schema (str): Name of the schema.
         engine (sqlalchemy.engine.base.Engine): Engine object.
         logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
     Returns:
         None
     """
-    q1 = f"CREATE SCHEMA {schema_name};"
+    q1 = f"CREATE SCHEMA {schema};"
     engine_execute(engine,q1)
-    logg.info(f'Schema {schema_name} created.',logger=logger)
+    logg.info(f'Schema {schema} created.',logger=logger)
 
 def create_index(table,index_col,engine,logger=None):
     """
