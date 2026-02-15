@@ -23,7 +23,7 @@ echo "Updating ${VERSION_FILEPATH}..."
 echo "${FULL_VERSION}" > ${VERSION_FILEPATH}
 
 # version.py
-VERSION_DIRPATH=${SCRIPT_PATH}/mb_sql
+VERSION_DIRPATH=${SCRIPT_PATH}/mb/sql
 VERSION_FILEPATH=${VERSION_DIRPATH}/version.py
 
 mkdir -p ${VERSION_DIRPATH}
@@ -38,5 +38,5 @@ echo "__all__  = ['MAJOR_VERSION', 'MINOR_VERSION', 'PATCH_VERSION', 'version']"
 
 git add -A
 git commit -m "updated version.py to ${FULL_VERSION}"
-git tag -a "v${FULL_VERSION}" -m "Version ${FULL_VERSION}"
+git tag "${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}"
 echo "Repository has been tagged as version ${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}"

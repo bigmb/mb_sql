@@ -3,6 +3,7 @@
 import pandas as pd
 from .sql import read_sql,engine_execute
 import os
+from mb.utils.logging import logg
 
 __all__ = ['list_schemas','rename_table','drop_table','drop_schema','create_schema','create_index','clone_db']
 
@@ -53,8 +54,7 @@ def rename_table(new_table_name,old_table_name,engine,schema_name=None,logger=No
     else:
         q1 = f"ALTER TABLE {old_table_name} RENAME TO {new_table_name};"
     engine_execute(engine,q1)
-    if logger:
-        logger.info(f'Table {old_table_name} renamed to {new_table_name}.')
+    logg.info(f'Table {old_table_name} renamed to {new_table_name}.',logger=logger)
 
 def drop_table(table_name,engine,schema_name=None,logger=None):
     """
@@ -73,8 +73,7 @@ def drop_table(table_name,engine,schema_name=None,logger=None):
     else:
         q1 = f"DROP TABLE {table_name};"
     engine_execute(engine,q1)
-    if logger:
-        logger.info(f'Table {table_name} dropped.')
+    logg.info(f'Table {table_name} dropped.',logger=logger)
         
 def drop_schema(schema_name,engine,logger=None):
     """
@@ -89,8 +88,7 @@ def drop_schema(schema_name,engine,logger=None):
     """
     q1 = f"DROP SCHEMA {schema_name};"
     engine_execute(engine,q1)
-    if logger:
-        logger.info(f'Schema {schema_name} dropped.')
+    logg.info(f'Schema {schema_name} dropped.',logger=logger)
         
 def create_schema(schema_name,engine,logger=None):
     """
@@ -105,8 +103,7 @@ def create_schema(schema_name,engine,logger=None):
     """
     q1 = f"CREATE SCHEMA {schema_name};"
     engine_execute(engine,q1)
-    if logger:
-        logger.info(f'Schema {schema_name} created.')
+    logg.info(f'Schema {schema_name} created.',logger=logger)
 
 def create_index(table,index_col,engine,logger=None):
     """
@@ -122,8 +119,7 @@ def create_index(table,index_col,engine,logger=None):
     """
     q1 = f"CREATE INDEX {index_col} ON {table};"
     engine_execute(engine,q1)
-    if logger:
-        logger.info(f'Index {index_col} created for table {table}.')
+    logg.info(f'Index {index_col} created for table {table}.',logger=logger)
         
 def clone_db(ori_db_location,copy_db_location, logger=None):
     """
@@ -148,6 +144,5 @@ def clone_db(ori_db_location,copy_db_location, logger=None):
     cmd = f"pg_dump -U postgres -h localhost -p 5432 {ori_db_location} | psql -U postgres -h localhost -p 5432 {copy_db_location}"
     os.system(cmd)
 
-    if logger:
-        logger.info(f'Database cloned from {ori_db_location} to {copy_db_location}.')    
+    logg.info(f'Database cloned from {ori_db_location} to {copy_db_location}.',logger=logger)    
     

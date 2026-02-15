@@ -1,5 +1,6 @@
 import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker,declarative_base
+from mb.utils.logging import logg
 
 __all__ = ['get_engine', 'get_session','get_base','get_metadata']
 
@@ -25,12 +26,10 @@ def get_engine(name:str ='postgresql+psycopg2' , db: str = 'postgres',
     """
     try:
         engine = sa.create_engine(f'{name}://{user}:{password}@{host}:{port}/{db}', echo=echo)
-        if logger:
-            logger.info(f'Engine created for {name} database.')
+        logg.info(f'Engine created for {name} database.', logger=logger)
         return engine
     except Exception as e:
-        if logger:
-            logger.error(f'Error creating engine for {name} database.')
+        logg.error(f'Error creating engine for {name} database.', logger=logger)
         raise e    
 
 def get_session(engine, logger=None):
@@ -45,12 +44,10 @@ def get_session(engine, logger=None):
     """
     try:
         session = sessionmaker(bind=engine)()
-        if logger:
-            logger.info(f'Session created for {engine.url.database} database.')
+        logg.info(f'Session created for {engine.url.database} database.', logger=logger)
         return session
     except Exception as e:
-        if logger:
-            logger.error(f'Error creating session for {engine.url.database} database.')
+        logg.error(f'Error creating session for {engine.url.database} database.', logger=logger)
         raise e
     
 def get_base(logger=None):
@@ -64,12 +61,10 @@ def get_base(logger=None):
     """
     try:
         Base = declarative_base()
-        if logger:
-            logger.info('Base created for database.')
+        logg.info('Base created for database.', logger=logger)
         return Base
     except Exception:
-        if logger:
-            logger.error('Error creating base for database.')
+        logg.error('Error creating base for database.', logger=logger)
     
 def get_metadata(base,conn, logger=None):
     """Get a SQLAlchemy metadata object.
@@ -83,10 +78,8 @@ def get_metadata(base,conn, logger=None):
     """
     try:
         metadata = base.metadata.create_all(conn)
-        if logger: 
-            logger.info('Metadata created for database.')
+        logg.info('Metadata created for database.', logger=logger)
         return metadata
     except Exception:
-        if logger: 
-            logger.error('Error creating metadata for database.')
+        logg.error('Error creating metadata for database.', logger=logger)
             

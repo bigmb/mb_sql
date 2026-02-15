@@ -1,5 +1,6 @@
 import sqlalchemy as sa
 import pandas as pd
+from mb.utils.logging import logg
 
 __all__ = ['read_sql','engine_execute','to_sql']
 
@@ -39,12 +40,10 @@ def read_sql(query,engine,index_col=None,chunk_size=10000,logger=None):
             for chunk in pd.read_sql(query,conn,index_col=index_col,chunksize=chunk_size):
                 df = pd.concat([df,chunk],ignore_index=True)
             
-        if logger:
-            logger.info('SQL query executed successfully.')
+        logg.info('SQL query executed successfully.',logger=logger)
         return df
     except sa.exc.SQLAlchemyError as e:
-        if logger:
-            logger.error('Error executing SQL query.')
+        logg.error('Error executing SQL query.',logger=logger)
         raise e
     
 def engine_execute(engine, query_str):
@@ -90,11 +89,9 @@ def to_sql(df,engine,table_name,schema=None,if_exists='replace',index=False,inde
             if index_label is None:
                 index_label = df.index.name
         df.to_sql(table_name,engine,schema=schema,if_exists=if_exists,index=index,index_label=index_label,chunksize=chunksize)
-        if logger:
-            logger.info(f'DataFrame written to {table_name} table.')
+        logg.info(f'DataFrame written to {table_name} table.',logger=logger)
     except Exception as e:
-        if logger:
-            logger.error(f'Error writing DataFrame to {table_name} table.')
+        logg.error(f'Error writing DataFrame to {table_name} table.',logger=logger)
         raise e
     
     

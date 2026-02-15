@@ -1,4 +1,13 @@
-from mb_utils.src import s3
+'''
+fix this file. 
+it hsould be able to take any snapshot of the current data and save it to s3 and vice versa.
+ID should be given and stored in s3/DB as well along with time-data.
+'''
+from mb.utils import s3
+from typing import Optional
+import pandas as pd
+from mb.utils.logging import logg
+from mb.pandas.dfload import load_any_df
 
 __api__ = [
     "get_s3url",
@@ -69,7 +78,7 @@ def list_ids(df_name: str, show_progress: bool = False) -> list:
     """
 
     s3url = f"s3://vision-ml-datasets/snapshots/dataframes/{df_name}/"
-    l_s3urls = list_objects(s3url, show_progress=show_progress)
+    l_s3urls = s3.list_objects(s3url, show_progress=show_progress)
     l_filenames = [x[len(s3url) :] for x in l_s3urls]
     l_ids = [
         int(x[2:-8])
@@ -124,8 +133,9 @@ def make_new_id(df_name: str) -> int:
 def save(
     df: pd.DataFrame,
     df_name: str,
-    sn_id: tp.Optional[int] = None,
-    logger: tp.Optional[logg.IndentedLoggerAdapter] = None,
+    sn_id: Optional[int] = None,
+    local_path: Optional[str] = './snapshot.parquet',
+    logger = None,
 ):
     """Snapshots a dataframe.
 
@@ -138,24 +148,27 @@ def save(
     sn_id : int, optional
         snapshot id to which the dataframe will be saved. If not provided, the id will be
         automatically generated.
+    local_path : str, optional
+        local path to save the snapshot. Default is './snapshot.parquet'
+    logger : optional
+        logger to log the snapshotting process. If not provided, no logging will be done.
     """
 
     if sn_id is None:
         sn_id = make_new_id(df_name)
 
     msg = f"Snapshotting dataframe {df_name} with id {sn_id}"
-    with logg.scoped_info(msg, logger=logger):
-        s3url = get_s3url(df_name, sn_id)
-        filepath = cache_localpath(s3url)
-        path.make_dirs(path.dirname(filepath))
-        pd.dfsave(df, filepath, show_progress=bool(logger), pack=False)
-        upload(filepath, s3url, logger=logger)
+    s3url_local_path = get_s3url(df_name, sn_id)
+    logg.info(msg, logger=logger)
+    file = load_any_df(s3url_local_path)
+    file.to_parquet(local_path, index=False)
+    return file
 
 
 def load(
     df_name: str,
-    sn_id: tp.Optional[int] = None,
-    logger: tp.Optional[logg.IndentedLoggerAdapter] = None,
+    sn_id: Optional[int] = None,
+    logger: Optional = None,
 ) -> pd.DataFrame:
     """Loads a dataframe snapshot.
 
@@ -179,6 +192,6 @@ def load(
     msg = f"Loading a dataframe {df_name} with snapshot id {sn_id}"
     with logg.scoped_info(msg, logger=logger):
         s3url = get_s3url(df_name, sn_id)
-        filepath = cache(s3url, logger=logger)
+        # filepath = cache(s3url, logger=logger)
 
-        return pd.dfload(filepath, show_progress=bool(logger), unpack=False)
+        # return pd.dfload(filepath, show_progress=bool(logger), unpack=False)

@@ -1,6 +1,7 @@
 
 import requests
 import json
+from mb.utils.logging import logg
 
 __all__ = ['slack_msg']
 
@@ -20,5 +21,4 @@ def slack_msg(webhook,msg,logger=None):
         data=json.dumps(msg),
         headers={'Content-Type': 'application/json'})
 
-    if logger:
-        logger.info('Slack response: %s', response.text)
+    logg.info('Slack response: %s', response.text, logger=logger)
