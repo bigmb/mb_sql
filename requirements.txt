@@ -3,3 +3,4 @@ numpy
 pandas
 mb_pandas 
 mb_utils
+mb_base
