@@ -1,21 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>mb_sql package &mdash; mb_sql 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -47,37 +47,14 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">mb_sql</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">mb_sql package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql.conn">mb_sql.conn module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.conn.get_base"><code class="docutils literal notranslate"><span class="pre">get_base()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.conn.get_engine"><code class="docutils literal notranslate"><span class="pre">get_engine()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.conn.get_metadata"><code class="docutils literal notranslate"><span class="pre">get_metadata()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.conn.get_session"><code class="docutils literal notranslate"><span class="pre">get_session()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql.slack">mb_sql.slack module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql.sql">mb_sql.sql module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.sql.engine_execute"><code class="docutils literal notranslate"><span class="pre">engine_execute()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.sql.read_sql"><code class="docutils literal notranslate"><span class="pre">read_sql()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.sql.to_sql"><code class="docutils literal notranslate"><span class="pre">to_sql()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql.tables">mb_sql.tables module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.tables.TableConfig"><code class="docutils literal notranslate"><span class="pre">TableConfig</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql.update">mb_sql.update module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql.utils">mb_sql.utils module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.utils.clone_db"><code class="docutils literal notranslate"><span class="pre">clone_db()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.utils.create_index"><code class="docutils literal notranslate"><span class="pre">create_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.utils.create_schema"><code class="docutils literal notranslate"><span class="pre">create_schema()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.utils.drop_schema"><code class="docutils literal notranslate"><span class="pre">drop_schema()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.utils.drop_table"><code class="docutils literal notranslate"><span class="pre">drop_table()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.utils.list_schemas"><code class="docutils literal notranslate"><span class="pre">list_schemas()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mb_sql.utils.rename_table"><code class="docutils literal notranslate"><span class="pre">rename_table()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql.version">mb_sql.version module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-mb_sql">Module contents</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mb-sql-conn-module">mb_sql.conn module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mb-sql-slack-module">mb_sql.slack module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mb-sql-sql-module">mb_sql.sql module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mb-sql-tables-module">mb_sql.tables module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mb-sql-update-module">mb_sql.update module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mb-sql-utils-module">mb_sql.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mb-sql-version-module">mb_sql.version module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-contents">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html">setup module</a></li>
@@ -110,337 +87,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="mb-sql-package">
-<h1>mb_sql package<a class="headerlink" href="#mb-sql-package" title="Permalink to this heading"></a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-</div>
-<div class="section" id="module-mb_sql.conn">
-<span id="mb-sql-conn-module"></span><h2>mb_sql.conn module<a class="headerlink" href="#module-mb_sql.conn" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.conn.get_base">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.conn.</span></span><span class="sig-name descname"><span class="pre">get_base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger=&lt;Logger</span> <span class="pre">mb_utils</span> <span class="pre">(Level</span> <span class="pre">1)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/conn.html#get_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.conn.get_base" title="Permalink to this definition"></a></dt>
-<dd><p>Get a SQLAlchemy declarative base object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Declarative base object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>base (sqlalchemy.ext.declarative.api.DeclarativeMeta)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.conn.get_engine">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.conn.</span></span><span class="sig-name descname"><span class="pre">get_engine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port=5432</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger=&lt;Logger</span> <span class="pre">mb_utils</span> <span class="pre">(Level</span> <span class="pre">1)&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echo=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/conn.html#get_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.conn.get_engine" title="Permalink to this definition"></a></dt>
-<dd><p>Get a SQLAlchemy engine object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Name of the database.</p></li>
-<li><p><strong>db</strong> (<em>str</em>) – Database name.</p></li>
-<li><p><strong>user</strong> (<em>str</em>) – Username for the database.</p></li>
-<li><p><strong>password</strong> (<em>str</em>) – Password for the database.</p></li>
-<li><p><strong>host</strong> (<em>str</em>) – Hostname for the database.</p></li>
-<li><p><strong>port</strong> (<em>str</em>) – Port for the database. Default: 5432</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-<li><p><strong>echo</strong> (<em>bool</em>) – Echo SQL statements to stdout. Default: False</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Engine object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>engine (sqlalchemy.engine.base.Engine)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.conn.get_metadata">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.conn.</span></span><span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger=&lt;Logger</span> <span class="pre">mb_utils</span> <span class="pre">(Level</span> <span class="pre">1)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/conn.html#get_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.conn.get_metadata" title="Permalink to this definition"></a></dt>
-<dd><p>Get a SQLAlchemy metadata object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>base</strong> (<em>sqlalchemy.ext.declarative.api.DeclarativeMeta</em>) – Declarative base object.</p></li>
-<li><p><strong>conn</strong> (<em>sqlalchemy.engine.base.Connection</em>) – Connection object.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Metadata object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>metadata (sqlalchemy.sql.schema.MetaData)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.conn.get_session">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.conn.</span></span><span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger=&lt;Logger</span> <span class="pre">mb_utils</span> <span class="pre">(Level</span> <span class="pre">1)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/conn.html#get_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.conn.get_session" title="Permalink to this definition"></a></dt>
-<dd><p>Get a SQLAlchemy session object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Session object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>session (sqlalchemy.orm.session.Session)</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="module-mb_sql.slack">
-<span id="mb-sql-slack-module"></span><h2>mb_sql.slack module<a class="headerlink" href="#module-mb_sql.slack" title="Permalink to this heading"></a></h2>
-</div>
-<div class="section" id="module-mb_sql.sql">
-<span id="mb-sql-sql-module"></span><h2>mb_sql.sql module<a class="headerlink" href="#module-mb_sql.sql" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.sql.engine_execute">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.sql.</span></span><span class="sig-name descname"><span class="pre">engine_execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/sql.html#engine_execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.sql.engine_execute" title="Permalink to this definition"></a></dt>
-<dd><p>Execute a query on a SQLAlchemy engine object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>query_str</strong> (<em>str</em>) – Query string.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Result object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>result (sqlalchemy.engine.result.ResultProxy)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.sql.read_sql">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.sql.</span></span><span class="sig-name descname"><span class="pre">read_sql</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/sql.html#read_sql"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.sql.read_sql" title="Permalink to this definition"></a></dt>
-<dd><p>Read SQL query into a DataFrame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>query</strong> (<em>str</em>) – SQL query.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>DataFrame object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>df (pandas.core.frame.DataFrame)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.sql.to_sql">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.sql.</span></span><span class="sig-name descname"><span class="pre">to_sql</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_exists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'replace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunksize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/sql.html#to_sql"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.sql.to_sql" title="Permalink to this definition"></a></dt>
-<dd><p>Write records stored in a DataFrame to a SQL database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<em>pandas.core.frame.DataFrame</em>) – DataFrame object.</p></li>
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>table_name</strong> (<em>str</em>) – Name of the table.</p></li>
-<li><p><strong>schema</strong> (<em>str</em>) – Name of the schema. Default: None</p></li>
-<li><p><strong>if_exists</strong> (<em>str</em>) – How to behave if the table already exists. Default: ‘replace’</p></li>
-<li><p><strong>index</strong> (<em>bool</em>) – Write DataFrame index as a column. Default: False</p></li>
-<li><p><strong>index_label</strong> (<em>str</em>) – Column label for index column(s). If None is given (default) and index is True, then the index names are used. A sequence should be given if the DataFrame uses MultiIndex. Default: None</p></li>
-<li><p><strong>chunksize</strong> (<em>int</em>) – Number of rows to write at a time. Default: 10000</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="module-mb_sql.tables">
-<span id="mb-sql-tables-module"></span><h2>mb_sql.tables module<a class="headerlink" href="#module-mb_sql.tables" title="Permalink to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="mb_sql.tables.TableConfig">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mb_sql.tables.</span></span><span class="sig-name descname"><span class="pre">TableConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_col</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_engine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'mb_public2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/tables.html#TableConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.tables.TableConfig" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Table configuration object.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="mb_sql.tables.TableConfig.get_dst_engine">
-<span class="sig-name descname"><span class="pre">get_dst_engine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/tables.html#TableConfig.get_dst_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.tables.TableConfig.get_dst_engine" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mb_sql.tables.TableConfig.get_src_engine">
-<span class="sig-name descname"><span class="pre">get_src_engine</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/tables.html#TableConfig.get_src_engine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.tables.TableConfig.get_src_engine" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-mb_sql.update">
-<span id="mb-sql-update-module"></span><h2>mb_sql.update module<a class="headerlink" href="#module-mb_sql.update" title="Permalink to this heading"></a></h2>
-</div>
-<div class="section" id="module-mb_sql.utils">
-<span id="mb-sql-utils-module"></span><h2>mb_sql.utils module<a class="headerlink" href="#module-mb_sql.utils" title="Permalink to this heading"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.utils.clone_db">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.utils.</span></span><span class="sig-name descname"><span class="pre">clone_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ori_db_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy_db_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/utils.html#clone_db"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.utils.clone_db" title="Permalink to this definition"></a></dt>
-<dd><p>Clone a database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ori_db_location</strong> (<em>str</em>) – Location of the original database.</p></li>
-<li><p><strong>copy_db_location</strong> (<em>str</em>) – Location for the new database.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.utils.create_index">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.utils.</span></span><span class="sig-name descname"><span class="pre">create_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/utils.html#create_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.utils.create_index" title="Permalink to this definition"></a></dt>
-<dd><p>Create an Index for a table in database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>table</strong> (<em>str</em>) – Name of the table.</p></li>
-<li><p><strong>index_col</strong> (<em>str</em>) – Name of the index_col in the table.</p></li>
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.utils.create_schema">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.utils.</span></span><span class="sig-name descname"><span class="pre">create_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/utils.html#create_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.utils.create_schema" title="Permalink to this definition"></a></dt>
-<dd><p>Create schema in database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>schema_name</strong> (<em>str</em>) – Name of the schema.</p></li>
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.utils.drop_schema">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.utils.</span></span><span class="sig-name descname"><span class="pre">drop_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/utils.html#drop_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.utils.drop_schema" title="Permalink to this definition"></a></dt>
-<dd><p>Drop schema in database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>schema_name</strong> (<em>str</em>) – Name of the schema.</p></li>
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.utils.drop_table">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.utils.</span></span><span class="sig-name descname"><span class="pre">drop_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/utils.html#drop_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.utils.drop_table" title="Permalink to this definition"></a></dt>
-<dd><p>Drop table in database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>table_name</strong> (<em>str</em>) – Name of the table.</p></li>
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>schema_name</strong> (<em>str</em>) – Name of the schema. Default: None</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.utils.list_schemas">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.utils.</span></span><span class="sig-name descname"><span class="pre">list_schemas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/mb_sql/utils.html#list_schemas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.utils.list_schemas" title="Permalink to this definition"></a></dt>
-<dd><p>Returns list of schemas in database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>DataFrame object.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>df (pandas.core.frame.DataFrame)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mb_sql.utils.rename_table">
-<span class="sig-prename descclassname"><span class="pre">mb_sql.utils.</span></span><span class="sig-name descname"><span class="pre">rename_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mb_sql/utils.html#rename_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mb_sql.utils.rename_table" title="Permalink to this definition"></a></dt>
-<dd><p>Rename table in database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>new_table_name</strong> (<em>str</em>) – New name of the table.</p></li>
-<li><p><strong>old_table_name</strong> (<em>str</em>) – Old name of the table.</p></li>
-<li><p><strong>engine</strong> (<em>sqlalchemy.engine.base.Engine</em>) – Engine object.</p></li>
-<li><p><strong>schema_name</strong> (<em>str</em>) – Name of the schema. Default: None</p></li>
-<li><p><strong>logger</strong> (<em>logging.Logger</em>) – Logger object. Default: mb_utils.src.logging.logger</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="module-mb_sql.version">
-<span id="mb-sql-version-module"></span><h2>mb_sql.version module<a class="headerlink" href="#module-mb_sql.version" title="Permalink to this heading"></a></h2>
-</div>
-<div class="section" id="module-mb_sql">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-mb_sql" title="Permalink to this heading"></a></h2>
-</div>
-</div>
+  <section id="mb-sql-package">
+<h1>mb_sql package<a class="headerlink" href="#mb-sql-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="mb-sql-conn-module">
+<h2>mb_sql.conn module<a class="headerlink" href="#mb-sql-conn-module" title="Link to this heading"></a></h2>
+</section>
+<section id="mb-sql-slack-module">
+<h2>mb_sql.slack module<a class="headerlink" href="#mb-sql-slack-module" title="Link to this heading"></a></h2>
+</section>
+<section id="mb-sql-sql-module">
+<h2>mb_sql.sql module<a class="headerlink" href="#mb-sql-sql-module" title="Link to this heading"></a></h2>
+</section>
+<section id="mb-sql-tables-module">
+<h2>mb_sql.tables module<a class="headerlink" href="#mb-sql-tables-module" title="Link to this heading"></a></h2>
+</section>
+<section id="mb-sql-update-module">
+<h2>mb_sql.update module<a class="headerlink" href="#mb-sql-update-module" title="Link to this heading"></a></h2>
+</section>
+<section id="mb-sql-utils-module">
+<h2>mb_sql.utils module<a class="headerlink" href="#mb-sql-utils-module" title="Link to this heading"></a></h2>
+</section>
+<section id="mb-sql-version-module">
+<h2>mb_sql.version module<a class="headerlink" href="#mb-sql-version-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-contents">
+<h2>Module contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+</section>
+</section>
 
 
            </div>
