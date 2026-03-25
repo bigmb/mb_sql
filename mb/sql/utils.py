@@ -5,36 +5,56 @@ from .basic import read_sql,engine_execute
 import os
 from mb.utils.logging import logg
 
-__all__ = ['list_schemas','rename_table','drop_table','drop_schema','create_schema','create_index','clone_db']
+__all__ = ['list_schemas','rename_table','drop_table','drop_schema','create_schema','create_index','clone_db','list_tables']
 
 def list_schemas(engine,logger=None) -> pd.DataFrame:
     """
     Returns list of schemas in database.
     
     Args:
-        engine (sqlalchemy.engine.base.Engine): Engine object.
+        engine (sqlalchemy.engine.base.Engine): Engine object. If sqlite, will return 'main' schema using PRAGMA database_list.
         logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
     Returns:
         df (pandas.core.frame.DataFrame): DataFrame object.
     """
-    q1 ="SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('information_schema', 'mysql', 'performance_schema') ORDER BY schema_name;"
-    return read_sql(q1,engine,logger=logger)
+    try:
+        q1 ="SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('information_schema', 'mysql', 'performance_schema') ORDER BY schema_name;"
+        return read_sql(q1,engine,logger=logger)
+    except Exception as e:
+        logg.error(f'Error listing schemas in database.', logger=logger)
+        logg.info(f'Attempting to list schemas with PRAGMA database_list for sqlite.', logger=logger)
+        try:
+            q1 = "PRAGMA database_list;"
+            return read_sql(q1,engine,logger=logger)
+        except Exception as e:
+            logg.error(f'Error listing schemas in database.', logger=logger)
+            raise e
 
 def list_tables(engine,schema=None,logger=None) -> pd.DataFrame:
     """
     Returns list of tables in database.
     
     Args:
-        engine (sqlalchemy.engine.base.Engine): Engine object.
+        engine (sqlalchemy.engine.base.Engine): Engine object. If sqlite, will return all tables in the database using sqlite_master.
         schema (str): Name of the schema. Default: None
         logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
     Returns:
         df (pandas.core.frame.DataFrame): DataFrame object.
     
     """
-    q1 = f"SELECT table_name FROM information_schema.tables WHERE table_schema = '{schema}' ORDER BY table_name;"
-    return read_sql(q1,engine,logger=logger)
-    
+    try:
+        q1 = f"SELECT table_name FROM information_schema.tables WHERE table_schema = '{schema}' ORDER BY table_name;"
+        return read_sql(q1,engine,logger=logger)
+    except Exception as e:
+        logg.error(f'Error listing tables in database.', logger=logger)
+        logg.info(f'Attempting to list tables without schema filter and with sqlite_master.', logger=logger)
+        try:
+            q1 = "select name from sqlite_master where type='table';"
+            return read_sql(q1,engine,logger=logger)
+        except Exception as e:
+            logg.error(f'Error listing tables in database.', logger=logger)
+            raise e
+
 
 def rename_table(new_table_name,old_table_name,engine,schema=None,logger=None):
     """
