@@ -32,6 +32,24 @@ def get_engine(name:str ='postgresql+psycopg2' , db: str = 'postgres',
         logg.error(f'Error creating engine for {name} database.', logger=logger)
         raise e    
 
+def create_engine_from_url(url:str, logger=None, echo=False):
+    """Create a SQLAlchemy engine object from a URL.
+
+    Args:
+        url (str): URL for the database. eg: sqlite:///example.db
+        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
+        echo (bool): Echo SQL statements to stdout. Default: False
+    Returns:
+        engine (sqlalchemy.engine.base.Engine): Engine object.
+    """
+    try:
+        sa.create_engine(url, echo=echo)
+        logg.info(f'Engine created from URL: {url}', logger=logger)
+        return sa.create_engine(url, echo=echo)
+    except Exception as e:
+        logg.error(f'Error creating engine from URL: {url}', logger=logger)
+        raise e
+
 def get_session(engine, logger=None):
     """Get a SQLAlchemy session object.
 
