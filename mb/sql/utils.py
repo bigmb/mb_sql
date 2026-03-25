@@ -5,7 +5,8 @@ from .basic import read_sql,engine_execute
 import os
 from mb.utils.logging import logg
 
-__all__ = ['list_schemas','rename_table','drop_table','drop_schema','create_schema','create_index','clone_db','list_tables']
+__all__ = ['list_schemas','rename_table','drop_table','drop_schema','create_schema',
+           'create_index','clone_db','list_tables','get_table_schema']
 
 def list_schemas(engine,logger=None) -> pd.DataFrame:
     """
@@ -55,6 +56,30 @@ def list_tables(engine,schema=None,logger=None) -> pd.DataFrame:
             logg.error(f'Error listing tables in database.', logger=logger)
             raise e
 
+def get_table_schema(table_name,engine,schema=None,logger=None) -> pd.DataFrame:
+    """
+    Returns schema of a table in database.
+    
+    Args:
+        table_name (str): Name of the table.
+        engine (sqlalchemy.engine.base.Engine): Engine object. If sqlite, will return schema of the table using PRAGMA table_info.
+        schema (str): Name of the schema. Default: None
+        logger (logging.Logger): Logger object. Default: mb_utils.src.logging.logger
+    Returns:
+        df (pandas.core.frame.DataFrame): DataFrame object.
+    """
+    try:
+        q1 = f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{table_name}' AND table_schema = '{schema}';"
+        return read_sql(q1,engine,logger=logger)
+    except Exception as e:
+        logg.error(f'Error getting schema of table {table_name} in database.', logger=logger)
+        logg.info(f'Attempting to get schema of table {table_name} with PRAGMA table_info for sqlite.', logger=logger)
+        try:
+            q1 = f"PRAGMA table_info('{table_name}');"
+            return read_sql(q1,engine,logger=logger)
+        except Exception as e:
+            logg.error(f'Error getting schema of table {table_name} in database.', logger=logger)
+            raise e
 
 def rename_table(new_table_name,old_table_name,engine,schema=None,logger=None):
     """
