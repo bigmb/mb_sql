@@ -4,3 +4,5 @@ pandas
 mb_pandas 
 mb_utils
 mb_base
+boto3
+requests

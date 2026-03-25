@@ -13,7 +13,15 @@ setup(
     packages=find_namespace_packages(include=["mb.*"]),
     #packages=find_packages(),
     install_requires=[
-        "mb_utils",],
+        "boto3",
+        "mb_base",
+        "mb_pandas",
+        "mb_utils",
+        "numpy",
+        "pandas",
+        "requests",
+        "sqlalchemy",
+    ],
     setup_requires=["setuptools-git-versioning<2"],
     python_requires='>=3.8',
     setuptools_git_versioning={
